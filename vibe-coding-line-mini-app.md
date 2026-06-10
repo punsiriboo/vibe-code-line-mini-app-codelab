@@ -205,7 +205,7 @@ Duration: 0:20:00
 
 จุดเริ่มต้นสำหรับการพัฒนาแอปพลิเคชันต่างๆ บนแพลตฟอร์มของ LINE คือคุณจะต้องสมัครเป็น **LINE Developer** ก่อน
 
-1. เข้าไปที่ [https://developers.line.biz/console/](https://developers.line.biz/console/) แล้วเลือก **Log in with LINE account** (สีเขียว) เพื่อเข้าสู่ระบบ
+1. เข้าไปที่ [https://developers.line.biz/console/](https://developers.line.biz/console/) แล้วเลือก **LINE account** (สีเขียว) เพื่อเข้าสู่ระบบ
 
 ![Log in with LINE account](img/4.1.png)
 
@@ -408,7 +408,7 @@ Keep the existing UI, styling, and reservation functionality unchanged.
 3. เลือกเพื่อนหรือกลุ่มที่ต้องการแชร์
 4. ตรวจสอบว่าได้รับ Flex Message คำเชิญจองโต๊ะ
 
-![Flex Message คำเชิญจองโต๊ะ](img/6.4png)
+![Flex Message คำเชิญจองโต๊ะ](img/6.4.png)
 
 
 
@@ -497,14 +497,44 @@ Duration: 0:45:00
 <strong>Note:</strong> ใช้ <strong>Template name for API use</strong> และ <strong>Template Variables</strong> ชุดเดียวกับที่ทดสอบในขั้นตอนก่อนหน้า — ใน Codelab นี้คือ <code>book_request_s_b_th</code>
 </aside>
 
-### Prompt สร้าง Backend สำหรับ Service Message API
+### ขั้นตอนที่ 1: ทำความเข้าใจ API Flow
+
+Service Message ทำงานผ่าน 3 ขั้นตอนหลัก: ขอ Channel Access Token → แลก Notification Token → ส่งข้อความด้วย Template
+
+![Service Message API Flow](img/8.1.png)
+
+### ขั้นตอนที่ 2: คัดลอก Channel ID และ Channel secret
+
+**สำคัญ:** ก่อนส่ง Prompt ในขั้นตอนถัดไป คุณต้องดึง **Channel ID** และ **Channel Secret** จาก LINE Developers Console ก่อนเสมอ — Backend ใช้ค่าทั้งสองนี้ขอ Stateless Channel Access Token จาก LINE OAuth API (Step A ใน Prompt) หากยังไม่มีค่าเหล่านี้ การส่ง Service Message จะไม่สำเร็จ
+
+1. ไปที่ [LINE Developers Console](https://developers.line.biz/console/)
+2. เลือก Channel **Restaurant Reservation** (Developing)
+3. เปิดแท็บ **Basic settings**
+4. คัดลอก **Channel ID** แบบ **Developing**
+
+![คัดลอก Channel ID](img/8.2.png)
+
+5. ในหน้าเดียวกัน เลื่อนลงมาหา **Channel secret** แล้วคัดลอกค่าแบบ **Developing**
+
+![คัดลอก Channel secret](img/8.3.png)
+
+<aside class="positive">
+<strong>Tip:</strong> จด <strong>Channel ID</strong> และ <strong>Channel secret</strong> ไว้ก่อน — จะนำไปใส่ใน Environment Variables ของ Google AI Studio ในขั้นตอนถัดไป
+</aside>
+
+### ขั้นตอนที่ 3: ส่ง Prompt และตั้งค่า Environment Variables
+
+เมื่อมี **Channel ID** และ **Channel Secret** พร้อมแล้ว วาง Prompt ด้านล่างใน Google AI Studio แล้วกดส่ง — เมื่อ AI ขอค่า Environment Variables ให้กรอกดังนี้:
+- **CHANNEL_ID** — Channel ID จากขั้นตอนที่ 2
+- **CHANNEL_SECRET** — Channel secret จากขั้นตอนที่ 2
 
 ```
 ADD ENV FILE: 
 - CHANNEL_ID = YOUR_CHANNEL_ID
 - CHANNEL_SECRET = YOUR_CHANNEL_SECRET
 
-Implement a backend server function to send a LINE MINI App Service Message when a reservation is successfully created. We will use the standard template `book_request_s_b_th`.
+
+Implement a backend server function to send a LINE MINI App Service Message when a reservation is successfully created. Use the Service Message template `book_request_s_b_th` added in LINE Developers Console.
 
 ### Architecture & API Flow Adjustments
 
@@ -556,11 +586,27 @@ Please provide the complete, updated code blocks for:
 - `server.js` (Full Express server including the multi-step external requests to LINE's token and notifier platforms using URLSearchParams for Step A, utilizing `process.env.LINE_CHANNEL_ID` and `process.env.LINE_CHANNEL_SECRET`)
 ```
 
+หลังส่ง Prompt หาก Google AI Studio แสดงหน้าต่าง **Enter your environment variable to continue** ให้กรอกค่าให้ถูกต้องตามตารางด้านล่าง แล้วกด **Apply**:
 
+- **CHANNEL_ID** — วาง Channel ID แบบ **Developing** ที่คัดลอกจากขั้นตอนที่ 2 (ตัวเลขเท่านั้น ไม่มีเว้นวรรค)
+- **CHANNEL_SECRET** — วาง Channel secret แบบ **Developing** จากขั้นตอนที่ 2 (คัดลอกทั้งสตริง ไม่เว้นวรรคหน้า-หลัง)
+- **TEMPLATE_NAME** — `book_request_s_b_th` (ต้องตรงกับ **Template name for API use** ที่สร้างไว้ในขั้นตอนก่อนหน้า)
 
-### ทดสอบ Service Message
-- จองโต๊ะใน MINI App 
-- ได้รับ Service Message ผ่าน LINE MINI App Notice
+![ตั้งค่า Environment Variables](img/8.4.png)
+
+<aside class="negative">
+<strong>Important:</strong> ใช้ค่าแบบ <strong>Developing</strong> เท่านั้น (ไม่ใช่ Review หรือ Published) — หากกรอกผิด การส่ง Service Message จะล้มเหลว
+</aside>
+
+### ขั้นตอนที่ 4: ทดสอบ Service Message
+
+1. เปิด MINI App กรอกข้อมูลจองโต๊ะ แล้วกด **Reserve Now**
+
+![ทดสอบจองโต๊ะใน MINI App](img/8.5.png)
+
+2. ตรวจสอบว่าได้รับ Service Message ยืนยันการจองผ่าน LINE MINI App Notice
+
+![Service Message ยืนยันการจอง](img/8.6.png)
 
 
 
