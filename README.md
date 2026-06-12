@@ -4,7 +4,7 @@ Code lab สำหรับการสร้าง LINE MINI App ด้วย V
 
 ## Codelab
 
-📁 `vibe-coding-line-mini-app-with-ai-studio/`
+📁 `vibe-coding-line-mini-app-in-ai-studio/`
 
 **Vibe Coding LINE MINI App with AI Studio** — สอนการสร้างเว็บจองร้านอาหาร แปลงเป็น LINE MINI App และส่ง Service Message ทั้งหมดด้วย Prompt ใน Google AI Studio
 
@@ -29,7 +29,7 @@ Ref: https://github.com/googlecodelabs/tools/tree/main/claat
 ### วิธีที่ 1: ใช้ build.sh (แนะนำ)
 
 ```bash
-cd vibe-coding-line-mini-app-with-ai-studio
+cd vibe-coding-line-mini-app-in-ai-studio
 ./build.sh
 ```
 
@@ -43,14 +43,14 @@ cd vibe-coding-line-mini-app-with-ai-studio
 ### วิธีที่ 2: ระบุไฟล์และโฟลเดอร์ output เอง
 
 ```bash
-cd vibe-coding-line-mini-app-with-ai-studio
+cd vibe-coding-line-mini-app-in-ai-studio
 ./build.sh vibe-coding-line-mini-app.md codelab
 ```
 
 ## วิธี Deploy Codelab
 
 ```bash
-cd vibe-coding-line-mini-app-with-ai-studio
+cd vibe-coding-line-mini-app-in-ai-studio
 ./deploy.sh --build
 ```
 
@@ -61,13 +61,13 @@ cd vibe-coding-line-mini-app-with-ai-studio
 
 URL หลัง deploy:
 
-https://storage.googleapis.com/codelabs-beat-beat/vibe-coding-line-mini-app/index.html
+https://storage.googleapis.com/codelabs-beat-beat/vibe-coding-line-mini-app-in-ai-studio/index.html
 
 ## โครงสร้างโปรเจค
 
 ```
 vibe-code-line-mini-app-codelasb/
-├── vibe-coding-line-mini-app-with-ai-studio/
+├── vibe-coding-line-mini-app-in-ai-studio/
 │   ├── build.sh                          # สคริปต์สำหรับ build codelab
 │   ├── deploy.sh                         # สคริปต์สำหรับ deploy ขึ้น GCS
 │   ├── vibe-coding-line-mini-app.md      # ไฟล์ markdown หลัก

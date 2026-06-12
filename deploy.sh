@@ -14,7 +14,7 @@ NC='\033[0m'
 
 GCS_BUCKET="codelabs-beat-beat"
 GCP_ACCOUNT="punsiri.boo@gmail.com"
-CODELAB_ID="vibe-coding-line-mini-app"
+CODELAB_ID="vibe-coding-line-mini-app-in-ai-studio"
 CODELAB_DIR="codelab"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARKDOWN_FILE="vibe-coding-line-mini-app.md"
