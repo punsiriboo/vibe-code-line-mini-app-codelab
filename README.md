@@ -66,7 +66,7 @@ https://storage.googleapis.com/codelabs-beat-beat/vibe-coding-line-mini-app-in-a
 ## โครงสร้างโปรเจค
 
 ```
-vibe-code-line-mini-app-codelasb/
+vibe-code-line-mini-app-codelab/
 ├── vibe-coding-line-mini-app-in-ai-studio/
 │   ├── build.sh                          # สคริปต์สำหรับ build codelab
 │   ├── deploy.sh                         # สคริปต์สำหรับ deploy ขึ้น GCS
