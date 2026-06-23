@@ -38,10 +38,30 @@ OUTPUT_DIR="${2:-codelab}"
 
 # Auto-detect markdown file if not provided
 if [ -z "$MARKDOWN_FILE" ]; then
-    # Find first .md file in current directory
-    MARKDOWN_FILE=$(find . -maxdepth 1 -name "*.md" -type f | head -n 1)
+    # Prefer .md files with codelab metadata (id:), excluding README
+    for f in ./*.md; do
+        [ -f "$f" ] || continue
+        case "$(basename "$f")" in
+            README.md|CONTRIBUTING.md) continue ;;
+        esac
+        if grep -q "^id:" "$f"; then
+            MARKDOWN_FILE="$f"
+            break
+        fi
+    done
+    # Fallback: first .md file excluding README
     if [ -z "$MARKDOWN_FILE" ]; then
-        echo -e "${RED}Error: No markdown file found in current directory${NC}"
+        for f in ./*.md; do
+            [ -f "$f" ] || continue
+            case "$(basename "$f")" in
+                README.md|CONTRIBUTING.md) continue ;;
+            esac
+            MARKDOWN_FILE="$f"
+            break
+        done
+    fi
+    if [ -z "$MARKDOWN_FILE" ]; then
+        echo -e "${RED}Error: No codelab markdown file found in current directory${NC}"
         echo "Please specify a markdown file: $0 <markdown_file> [output_dir]"
         exit 1
     fi
