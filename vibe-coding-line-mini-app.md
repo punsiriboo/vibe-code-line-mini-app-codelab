@@ -398,6 +398,10 @@ LIFF Setup
 - Use liff.getContext() to retrieve environment information for debugging and application behavior.
 ```
 
+หลังส่ง Prompt หาก Google AI Studio แสดงหน้าต่าง **Enter your environment variable to continue** ให้กรอก **LIFF ID** (`VITE_LIFF_ID`) จากหัวข้อ **ตั้งค่า LINE MINI App** แล้วกด **Apply**
+
+![ตั้งค่า LIFF ID Environment Variable](img/7.2.png)
+
 
 ### ทดสอบ LINE MINI App
 
@@ -411,9 +415,7 @@ LIFF Setup
 - หลัง Login สำเร็จ จะเห็น User Profile Card พร้อมรูปโปรไฟล์และ Display Name และปุ่ม **Logout**
 - จองโต๊ะได้ตามปกติ
 
-
-
-![ทดสอบ LINE Login และ User Profile Card](img/7.2.png)
+![ทดสอบ LINE Login และ User Profile Card](img/7.3.png)
 
 
 ## ส่งและแชร์ข้อความ
@@ -461,7 +463,9 @@ When the button is clicked
 Keep the existing UI, styling, and reservation functionality unchanged.
 ```
 
-หลัง AI สร้างเสร็จ จะเห็นปุ่ม **Invite Friends** ใต้ LINE User Profile Card
+หลังจากแสดง LINE User Profile Card แล้ว ให้แสดงปุ่ม Invite Friends ใต้ Profile Card
+เมื่อผู้ใช้กดปุ่ม จะเรียกใช้งาน `liff.shareTargetPicker()` เพื่อเลือกเพื่อนใน LINE
+หลังจากเลือกเพื่อนแล้ว LINE จะะส่งข้อความ Flex Message ไปยังห้องแชทของเพื่อน หรือกลุ่มที่เลือกโดยอัตโนมัติ
 
 ![ปุ่ม Invite Friends](img/8.3.png)
 
@@ -506,9 +510,9 @@ Duration: 0:12:00
 ให้เลือก Template ที่ต้องการ โดยจะต้องเลือก Category, Language และ Template name — เมื่อเลือกแล้วเราจะได้ Template name สำหรับนำไปใช้กับ API ในขั้นตอนต่อไป
 
 สำหรับ Codelab นี้ ให้เลือก Template ดังนี้:
-- Category: Book
-- Language: Thai
-- Template name: Booking confirmed (simple)
+- **Category**: Book
+- **Language**: Thai
+- **Template name**: Booking confirmed (simple)
 
 เมื่อเลือก Template เรียบร้อยแล้ว จะสังเกตเห็นว่า Template name for API use แสดงเป็น `book_request_s_b_th` ซึ่งจะนำไปใช้ในการส่ง Service Message notification
 
@@ -553,27 +557,27 @@ Duration: 0:20:00
 
 ใน Codelab นี้ Service Message จะถูกส่งหลังจากผู้ใช้กด Reserve Now และจองโต๊ะสำเร็จ โดยระบบจะส่งข้อความยืนยันการจองไปยังผู้ใช้ผ่าน LINE MINI App Notice โดยอัตโนมัติ
 
-การทำงานนี้อาศัยการทำงานร่วมกันระหว่าง LINE MINI App (Frontend) และ Express Server (Backend) โดย Frontend จะส่ง LIFF Access Token และข้อมูลการจองไปยัง Backend จากนั้น Backend จะดำเนินการเรียก LINE API เพื่อยืนยันตัวตนของผู้ใช้และส่ง Service Message
+การทำงานนี้อาศัยการทำงานร่วมกันระหว่าง LINE MINI App (Client Side) และ Express Server (Server Side) โดย Client Side จะส่ง LIFF Access Token และข้อมูลการจองไปยัง Server Side จากนั้น Server Side จะดำเนินการเรียก LINE API เพื่อยืนยันตัวตนของผู้ใช้และส่ง Service Message
 
 ![Service Message Workflow](img/10.1.png)
 
 #### ขั้นตอนหลักในการส่ง Service Message
 
-1. Frontend ส่ง LIFF Access Token และข้อมูลการจองไปยัง Backend
+1. Client Side ส่ง LIFF Access Token และข้อมูลการจองไปยัง Server Side
 
-   หลังจากผู้ใช้กด Reserve Now และจองโต๊ะสำเร็จ Frontend จะดึง LIFF Access Token ของผู้ใช้ที่ Login แล้ว และส่งไปยัง Backend พร้อมข้อมูลการจอง
+   หลังจากผู้ใช้กด Reserve Now และจองโต๊ะสำเร็จ Client Side จะดึง LIFF Access Token ของผู้ใช้ที่ Login แล้ว และส่งไปยัง Server Side พร้อมข้อมูลการจอง
 
 2. Issue Channel Access Token
 
-   Backend ใช้ **Channel ID** และ **Channel Secret** เพื่อขอ Channel Access Token จาก LINE OAuth API
+   Server Side ใช้ **Channel ID** และ **Channel Secret** เพื่อขอ Channel Access Token จาก LINE OAuth API
 
 3. Issue Notification Token
 
-   Backend นำ LIFF Access Token ที่ได้รับจาก Frontend ไปแลกเป็น Notification Token เพื่อระบุผู้รับข้อความ
+   Server Side นำ LIFF Access Token ที่ได้รับจาก Client Side ไปแลกเป็น Notification Token เพื่อระบุผู้รับข้อความ
 
 4. Send Service Message
 
-   Backend ใช้ Notification Token และ Template ที่กำหนดไว้ เพื่อส่ง Service Message ไปยังผู้ใช้ผ่าน LINE MINI App Notice
+   Server Side ใช้ Notification Token และ Template ที่กำหนดไว้ เพื่อส่ง Service Message ไปยังผู้ใช้ผ่าน LINE MINI App Notice
 
 ### คัดลอก **Channel ID** และ **Channel Secret**
 
@@ -606,14 +610,14 @@ ADD ENV FILE:
 - CHANNEL_ID = YOUR_CHANNEL_ID
 - CHANNEL_SECRET = YOUR_CHANNEL_SECRET
 
-Implement a backend server function to send a LINE MINI App Service Message when a reservation is successfully created. Use the Service Message template `book_request_s_b_th` added in LINE Developers Console.
+Implement a server-side function to send a LINE MINI App Service Message when a reservation is successfully created. Use the Service Message template `book_request_s_b_th` added in LINE Developers Console.
 
 Architecture & API Flow Adjustments
 
-1. Frontend Client Modification
+1. Client-Side Modification
 - Update the API submission call in `src/api/reservationService.js`. 
 - Extract the user's active LIFF Access Token using `liff.getAccessToken()`.
-- Send this token to our Express backend via an HTTP request header named `x-liff-access-token`.
+- Send this token to the server side via an HTTP request header named `x-liff-access-token`.
 
 2. Express Server (`server.js`) Updates
 Add a dedicated helper function or expand the `POST /api/reservations` endpoint to orchestrate the 3-step LINE Service Message workflow:
@@ -659,7 +663,7 @@ Please provide the complete, updated code blocks for:
 - `server.js` (Full Express server including the multi-step external requests to LINE's token and notifier platforms using URLSearchParams for Step A, utilizing `process.env.LINE_CHANNEL_ID` and `process.env.LINE_CHANNEL_SECRET`)
 ```
 
-หลังส่ง Prompt หาก Google AI Studio แสดงหน้าต่าง **Enter your environment variable to continue** ให้กรอกค่า **CHANNEL_ID** และ **CHANNEL_SECRET** ให้ถูกต้อง แล้วกด **Apply**:
+หลังส่ง Prompt หาก Google AI Studio แสดงหน้าต่าง **Enter your environment variable to continue** ให้กรอกค่า **CHANNEL_ID** และ **CHANNEL_SECRET** ให้ถูกต้อง แล้วกด **Apply**
 
 
 ![ตั้งค่า Environment Variables](img/10.4.png)
