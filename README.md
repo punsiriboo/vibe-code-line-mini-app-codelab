@@ -124,5 +124,5 @@ chmod +x build.sh deploy.sh
 
 - [Google Codelabs Tools (claat)](https://github.com/googlecodelabs/tools)
 - [Format Guide](https://github.com/googlecodelabs/tools/blob/main/FORMAT-GUIDE.md)
-- [Google AI Studio](https://aistudio.google.com/)
+- [Google AI Studio](https://ai.studio/build/)
 - [LINE Developers Console](https://developers.line.biz/console/)
