@@ -565,7 +565,7 @@ Duration: 0:20:00
 
 3. Issue Notification Token<br/>
 
-   Server Side นำ LIFF Access Token ที่ได้รับจาก Client Side ไปแลกเป็น Notification Token เพื่อระบุผู้รับข้อความ
+   Server Side นำ LIFF Access Token ที่ได้รับจาก Client Side และ Channel Access Token ไปแลกเป็น Notification Token เพื่อใช้ส่งข้อความแจ้งเตือน
 
 4. Send Service Message<br/>
 
